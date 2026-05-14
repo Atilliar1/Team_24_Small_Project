@@ -52,7 +52,7 @@ Source: :contentReference[oaicite:0]{index=0}
 ## Links
 
 ### GitHub Repository
-[Insert GitHub Link Here]
+https://github.com/Atilliar1/Team_24_Small_Project.git
 
 ### Live Application
 [Insert Application Link Here]
