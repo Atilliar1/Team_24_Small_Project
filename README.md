@@ -17,7 +17,6 @@ The project uses a LAMP stack with a remote database and communicates between th
 | Nahin Takrim | Front-End |
 | Sundar Shivram | Project Manager & API |
 
-Source: :contentReference[oaicite:0]{index=0}
 
 ---
 
