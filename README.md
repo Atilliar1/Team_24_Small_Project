@@ -1,10 +1,58 @@
-Davidson, Chase:	
+# Personal Contact Manager
 
+## Project Description
 
-Hurley, Jonathon:	Data Base
+The Personal Contact Manager is a full-stack web application that allows users to securely manage their own personal contacts. Users can create an account, log in, add contacts, search contacts using partial matching, edit existing contacts, and delete contacts.  
 
+The project uses a LAMP stack with a remote database and communicates between the client and server using JSON-based API endpoints. The application is hosted remotely and accessed through a domain name.
 
-Nahin, Takrim:	Front - End
+---
 
+## Team Members
 
-Sundar, Shivram:	Project Manager & API
+| Team Member | Role |
+|---|---|
+| Davidson Chase |  |
+| Hurley Jonathon | Database |
+| Nahin Takrim | Front-End |
+| Sundar Shivram | Project Manager & API |
+
+Source: :contentReference[oaicite:0]{index=0}
+
+---
+
+## Technologies Used
+
+- HTML
+- CSS
+- JavaScript
+- AJAX
+- PHP
+- MySQL
+- Apache
+- JSON
+- SwaggerHub
+- GitHub
+
+---
+
+## Core Features
+
+- User Registration
+- User Login
+- Add Contacts
+- Edit Contacts
+- Delete Contacts
+- Partial Match Search
+- Remote Hosting
+- JSON API Communication
+
+---
+
+## Links
+
+### GitHub Repository
+[Insert GitHub Link Here]
+
+### Live Application
+[Insert Application Link Here]
