@@ -12,7 +12,7 @@ The project uses a LAMP stack with a remote database and communicates between th
 
 | Team Member | Role |
 |---|---|
-| Davidson Chase |  |
+| Davidson Chase | Front-End |
 | Hurley Jonathon | Database |
 | Nahin Takrim | Front-End |
 | Sundar Shivram | Project Manager & API |
