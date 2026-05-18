@@ -10,11 +10,11 @@
     <h2 class="text-center mb-4">Sign UP</h2>
     <form>
     <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">First Name:</label>
+        <label for="fname" class="form-label">First Name:</label>
         <input type="text" class="form-control" id="fname" aria-describedby="fnamelHelp">
     </div>
     <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label"> Last Name: </label>
+        <label for="lname" class="form-label"> Last Name: </label>
         <input type="text" class="form-control" id="lname" aria-describedby="lnamelHelp">
     </div>
   <div class="mb-3">
@@ -26,9 +26,28 @@
     <label for="exampleInputPassword1" class="form-label">Password</label>
     <input type="password" class="form-control" id="exampleInputPassword1">
   </div>
-  
+  <div class="mb-3">
+    <label for="confirmPassword" class="form-label">Confirm Password</label>
+    <input type="password" class="form-control" id="confirmPassword">
+    <div id="passwordMismatch" class="text-danger mt-1" style="display:none;">Passwords do not match.</div>
+  </div>
+
   <button type="submit" class="btn btn-success w-100">Sign Up</button>
 </form>
+
+<script>
+  document.querySelector('form').addEventListener('submit', function(e) {
+    const password = document.getElementById('exampleInputPassword1').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    const msg = document.getElementById('passwordMismatch');
+    if (password !== confirm) {
+      e.preventDefault();
+      msg.style.display = 'block';
+    } else {
+      msg.style.display = 'none';
+    }
+  });
+</script>
 
 <p class="text-center mt-3">
     Already have an account? <a href="index.html">Login</a>
