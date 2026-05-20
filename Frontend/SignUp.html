@@ -1,59 +1,359 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Sign Up Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-</head>
-<body class="d-flex justify-content-center align-items-center vh-100">
-    
-    <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
-    <h2 class="text-center mb-4">Sign UP</h2>
-    <form>
-    <div class="mb-3">
-        <label for="fname" class="form-label">First Name:</label>
-        <input type="text" class="form-control" id="fname" aria-describedby="fnamelHelp">
-    </div>
-    <div class="mb-3">
-        <label for="lname" class="form-label"> Last Name: </label>
-        <input type="text" class="form-control" id="lname" aria-describedby="lnamelHelp">
-    </div>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
-  </div>
-  <div class="mb-3">
-    <label for="confirmPassword" class="form-label">Confirm Password</label>
-    <input type="password" class="form-control" id="confirmPassword">
-    <div id="passwordMismatch" class="text-danger mt-1" style="display:none;">Passwords do not match.</div>
-  </div>
-
-  <button type="submit" class="btn btn-success w-100">Sign Up</button>
-</form>
-
-<script>
-  document.querySelector('form').addEventListener('submit', function(e) {
-    const password = document.getElementById('exampleInputPassword1').value;
-    const confirm = document.getElementById('confirmPassword').value;
-    const msg = document.getElementById('passwordMismatch');
-    if (password !== confirm) {
-      e.preventDefault();
-      msg.style.display = 'block';
-    } else {
-      msg.style.display = 'none';
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up – MyApp</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0f1f3d;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
     }
-  });
-</script>
 
-<p class="text-center mt-3">
-    Already have an account? <a href="index.html">Login</a>
-</p>
-</div>
+    .card {
+      width: 100%;
+      max-width: 420px;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      background: #ffffff;
+      padding: 2.25rem 2rem;
+    }
 
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.6rem;
+    }
+    .brand-dot {
+      width: 34px;
+      height: 34px;
+      background-color: #1a3a6b;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-dot i { color: #fff; font-size: 1rem; }
+    .brand-name { font-weight: 700; font-size: 1rem; color: #0f1f3d; }
+
+    h1 { font-size: 1.5rem; font-weight: 700; color: #0f1f3d; margin-bottom: 0.25rem; }
+    .subtitle { color: #6b7280; font-size: 0.875rem; margin-bottom: 1.6rem; }
+
+    label { font-weight: 600; font-size: 0.85rem; color: #1a3a6b; }
+
+    .form-control {
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .form-control:focus {
+      border-color: #1a3a6b;
+      box-shadow: 0 0 0 3px rgba(26, 58, 107, 0.15);
+    }
+    .form-control.is-invalid { border-color: #b91c1c; }
+
+    /* Two column layout for first/last name */
+    .name-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-signup {
+      width: 100%;
+      background-color: #1a3a6b;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      transition: background 0.18s, transform 0.1s;
+      margin-top: 0.5rem;
+    }
+    .btn-signup:hover  { background-color: #0f2a55; color: #fff; }
+    .btn-signup:active { transform: scale(0.98); background-color: #091e3e; color: #fff; }
+    .btn-signup:focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
+
+    .field-error {
+      display: none;
+      color: #7f1d1d;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      align-items: center;
+      gap: 5px;
+    }
+    .field-error.visible { display: flex; }
+
+    /* Password strength bar */
+    .strength-bar {
+      height: 4px;
+      border-radius: 4px;
+      background: #e5e7eb;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .strength-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 4px;
+      transition: width 0.3s, background 0.3s;
+    }
+    .strength-label {
+      font-size: 0.75rem;
+      margin-top: 3px;
+      color: #6b7280;
+    }
+
+    .login-link a {
+      color: #1a3a6b;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-weight: 600;
+    }
+    .login-link a:hover { color: #0f2a55; }
+    .login-link a:focus-visible { outline: 2px solid #1a3a6b; outline-offset: 2px; border-radius: 2px; }
+
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      background: #1a3a6b;
+      color: #fff;
+      padding: 0.4rem 0.9rem;
+      border-radius: 0 0 6px 6px;
+      font-size: 0.875rem;
+      text-decoration: none;
+      z-index: 999;
+    }
+    .skip-link:focus { top: 0; }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#signupForm">Skip to sign up form</a>
+
+  <div class="card">
+
+    <div class="brand" aria-hidden="true">
+      <div class="brand-dot">
+        <i class="bi bi-layers"></i>
+      </div>
+      <span class="brand-name">MyApp</span>
+    </div>
+
+    <h1>Create an account</h1>
+    <p class="subtitle">Fill in your details to get started.</p>
+
+    <form id="signupForm" novalidate>
+
+      <!-- First & Last name side by side -->
+      <div class="name-row mb-3">
+        <div>
+          <label for="fname" class="form-label">
+            First name
+            <span aria-hidden="true" style="color:#b91c1c;">*</span>
+            <span class="visually-hidden">(required)</span>
+          </label>
+          <input
+            type="text" class="form-control" id="fname"
+            autocomplete="given-name" placeholder="Jane"
+            required aria-required="true" aria-describedby="fnameError"
+          />
+          <div id="fnameError" class="field-error" role="alert">
+            <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+            <span id="fnameErrorText"></span>
+          </div>
+        </div>
+        <div>
+          <label for="lname" class="form-label">
+            Last name
+            <span aria-hidden="true" style="color:#b91c1c;">*</span>
+            <span class="visually-hidden">(required)</span>
+          </label>
+          <input
+            type="text" class="form-control" id="lname"
+            autocomplete="family-name" placeholder="Doe"
+            required aria-required="true" aria-describedby="lnameError"
+          />
+          <div id="lnameError" class="field-error" role="alert">
+            <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+            <span id="lnameErrorText"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">
+          Email address
+          <span aria-hidden="true" style="color:#b91c1c;">*</span>
+          <span class="visually-hidden">(required)</span>
+        </label>
+        <input
+          type="email" class="form-control" id="email"
+          autocomplete="email" placeholder="you@example.com"
+          required aria-required="true" aria-describedby="emailError"
+        />
+        <div id="emailError" class="field-error" role="alert">
+          <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+          <span id="emailErrorText"></span>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">
+          Password
+          <span aria-hidden="true" style="color:#b91c1c;">*</span>
+          <span class="visually-hidden">(required)</span>
+        </label>
+        <input
+          type="password" class="form-control" id="password"
+          autocomplete="new-password" placeholder="Min. 8 characters"
+          required aria-required="true" minlength="8"
+          aria-describedby="passwordError passwordStrengthLabel"
+        />
+        <!-- Password strength indicator — shape + color, not color alone -->
+        <div class="strength-bar" aria-hidden="true">
+          <div class="strength-bar-fill" id="strengthFill"></div>
+        </div>
+        <div id="passwordStrengthLabel" class="strength-label" aria-live="polite"></div>
+        <div id="passwordError" class="field-error" role="alert">
+          <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+          <span id="passwordErrorText"></span>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label">
+          Confirm password
+          <span aria-hidden="true" style="color:#b91c1c;">*</span>
+          <span class="visually-hidden">(required)</span>
+        </label>
+        <input
+          type="password" class="form-control" id="confirmPassword"
+          autocomplete="new-password" placeholder="Repeat your password"
+          required aria-required="true" aria-describedby="confirmError"
+        />
+        <div id="confirmError" class="field-error" role="alert">
+          <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+          <span id="confirmErrorText"></span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-signup">Create account</button>
+
+    </form>
+
+    <p class="text-center mt-3 login-link" style="font-size:0.875rem; color:#6b7280;">
+      Already have an account? <a href="index.html">Sign in</a>
+    </p>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+    // Password strength checker
+    document.getElementById('password').addEventListener('input', function () {
+      const val = this.value;
+      const fill = document.getElementById('strengthFill');
+      const label = document.getElementById('passwordStrengthLabel');
+
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const levels = [
+        { width: '0%',   color: '#e5e7eb', text: '' },
+        { width: '25%',  color: '#ef4444', text: 'Weak' },
+        { width: '50%',  color: '#f97316', text: 'Fair' },
+        { width: '75%',  color: '#eab308', text: 'Good' },
+        { width: '100%', color: '#22c55e', text: 'Strong' },
+      ];
+
+      fill.style.width      = levels[score].width;
+      fill.style.background = levels[score].color;
+      label.textContent     = val.length ? 'Strength: ' + levels[score].text : '';
+    });
+
+    // Form validation
+    document.getElementById('signupForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const fields = [
+        { id: 'fname',           errId: 'fnameError',    txtId: 'fnameErrorText',    msg: 'First name is required.' },
+        { id: 'lname',           errId: 'lnameError',    txtId: 'lnameErrorText',    msg: 'Last name is required.' },
+        { id: 'email',           errId: 'emailError',    txtId: 'emailErrorText',    msg: 'Email is required.' },
+        { id: 'password',        errId: 'passwordError', txtId: 'passwordErrorText', msg: 'Password is required.' },
+        { id: 'confirmPassword', errId: 'confirmError',  txtId: 'confirmErrorText',  msg: 'Please confirm your password.' },
+      ];
+
+      // Reset all
+      fields.forEach(f => {
+        const input = document.getElementById(f.id);
+        input.removeAttribute('aria-invalid');
+        input.classList.remove('is-invalid');
+        document.getElementById(f.errId).classList.remove('visible');
+      });
+
+      let valid = true;
+
+      fields.forEach(f => {
+        const input = document.getElementById(f.id);
+        if (!input.value.trim()) {
+          showFieldError(input, f.errId, f.txtId, f.msg);
+          valid = false;
+        }
+      });
+
+      // Email format check
+      const emailInput = document.getElementById('email');
+      if (emailInput.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+        showFieldError(emailInput, 'emailError', 'emailErrorText', 'Enter a valid email address.');
+        valid = false;
+      }
+
+      // Min length check
+      const pwInput = document.getElementById('password');
+      if (pwInput.value && pwInput.value.length < 8) {
+        showFieldError(pwInput, 'passwordError', 'passwordErrorText', 'Password must be at least 8 characters.');
+        valid = false;
+      }
+
+      // Password match check
+      const pw  = document.getElementById('password').value;
+      const cpw = document.getElementById('confirmPassword').value;
+      if (pw && cpw && pw !== cpw) {
+        showFieldError(document.getElementById('confirmPassword'), 'confirmError', 'confirmErrorText', 'Passwords do not match.');
+        valid = false;
+      }
+
+      if (!valid) {
+        document.querySelector('[aria-invalid="true"]').focus();
+        return;
+      }
+
+      // TODO: connect to API
+    });
+
+    function showFieldError(input, errId, txtId, msg) {
+      input.setAttribute('aria-invalid', 'true');
+      input.classList.add('is-invalid');
+      document.getElementById(txtId).textContent = msg;
+      document.getElementById(errId).classList.add('visible');
+    }
+
+  </script>
 
 </body>
 </html>
