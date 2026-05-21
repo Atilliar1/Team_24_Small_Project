@@ -6,100 +6,172 @@
   <title>Login – SM App</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-from:    #6aaee0;
+      --bg-to:      #89c0eb;
+      --card-bg:    #ffffff;
+      --brand:      #0c4480;
+      --brand-dark: #093568;
+      --brand-deep: #062650;
+      --text-head:  #05111e;
+      --text-sub:   #456070;
+      --label:      #0c4480;
+      --border:     #7ab2d8;
+      --focus-ring: rgba(12, 68, 128, 0.22);
+      --error:      #b91c1c;
+      --error-bg:   #fef2f2;
+      --font:       'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background-color: #0f1f3d;
+      font-family: var(--font);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 1.5rem;
+      background: linear-gradient(135deg, var(--bg-from) 0%, var(--bg-to) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    body::before {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(12,68,128,0.15) 0%, transparent 70%);
+      top: -160px; right: -160px;
+    }
+    body::after {
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, rgba(12,68,128,0.10) 0%, transparent 70%);
+      bottom: -120px; left: -120px;
     }
 
     .card {
+      position: relative;
+      z-index: 1;
       width: 100%;
       max-width: 420px;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-      background: #ffffff;
-      padding: 2.25rem 2rem;
+      border: 1px solid rgba(12,68,128,0.18);
+      border-radius: 20px;
+      box-shadow:
+        0 2px 4px rgba(5,17,30,0.06),
+        0 8px 24px rgba(5,17,30,0.14),
+        0 24px 56px rgba(5,17,30,0.10);
+      background: var(--card-bg);
+      padding: 2.5rem 2.25rem;
+      animation: rise 0.45s cubic-bezier(.22,1,.36,1) both;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1.6rem;
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .brand-dot {
-      width: 34px;
-      height: 34px;
-      background-color: #1a3a6b;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
+    h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--text-head);
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.02em;
     }
-    .brand-dot i { color: #fff; font-size: 1rem; }
-    .brand-name { font-weight: 700; font-size: 1rem; color: #0f1f3d; }
+    .subtitle {
+      color: var(--text-sub);
+      font-size: 0.875rem;
+      margin-bottom: 1.75rem;
+    }
 
-    h1 { font-size: 1.5rem; font-weight: 700; color: #0f1f3d; margin-bottom: 0.25rem; }
-    .subtitle { color: #6b7280; font-size: 0.875rem; margin-bottom: 1.6rem; }
+    .form-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(12,68,128,0.18), transparent);
+      margin-bottom: 1.5rem;
+    }
 
-    label { font-weight: 600; font-size: 0.85rem; color: #1a3a6b; }
+    label {
+      font-weight: 600;
+      font-size: 0.83rem;
+      color: var(--label);
+      letter-spacing: 0.01em;
+    }
 
     .form-control {
-      border: 1.5px solid #d1d5db;
-      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
       font-size: 0.9rem;
+      background: #f4f9fe;
+      color: var(--text-head);
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
     }
+    .form-control::placeholder { color: #90afc4; }
     .form-control:focus {
-      border-color: #1a3a6b;
-      box-shadow: 0 0 0 3px rgba(26, 58, 107, 0.15);
+      border-color: var(--brand);
+      background: #fff;
+      box-shadow: 0 0 0 3.5px var(--focus-ring);
+      outline: none;
     }
-    .form-control.is-invalid { border-color: #b91c1c; }
+    .form-control.is-invalid {
+      border-color: var(--error);
+      background: var(--error-bg);
+    }
+    .form-control.is-invalid:focus {
+      box-shadow: 0 0 0 3.5px rgba(185,28,28,0.12);
+    }
 
     .btn-signin {
       width: 100%;
-      background-color: #1a3a6b;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
       color: #fff;
+      font-family: var(--font);
       font-weight: 600;
       font-size: 0.95rem;
-      padding: 0.75rem;
+      padding: 0.78rem;
       border: none;
-      border-radius: 8px;
-      transition: background 0.18s, transform 0.1s;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      box-shadow: 0 4px 14px rgba(12,68,128,0.4);
+      transition: box-shadow 0.18s, transform 0.12s, filter 0.18s;
       margin-top: 0.5rem;
     }
-    .btn-signin:hover  { background-color: #0f2a55; color: #fff; }
-    .btn-signin:active { transform: scale(0.98); background-color: #091e3e; color: #fff; }
+    .btn-signin:hover  { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(12,68,128,0.5); }
+    .btn-signin:active { transform: scale(0.98); filter: brightness(0.95); }
     .btn-signin:focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
 
     .field-error {
       display: none;
       color: #7f1d1d;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       margin-top: 0.3rem;
       align-items: center;
       gap: 5px;
     }
     .field-error.visible { display: flex; }
 
+    .signup-link { font-size: 0.85rem; color: var(--text-sub); text-align: center; margin-top: 1.1rem; }
     .signup-link a {
-      color: #1a3a6b;
+      color: var(--brand);
+      font-weight: 600;
       text-decoration: underline;
       text-underline-offset: 2px;
-      font-weight: 600;
     }
-    .signup-link a:hover { color: #0f2a55; }
-    .signup-link a:focus-visible { outline: 2px solid #1a3a6b; outline-offset: 2px; border-radius: 2px; }
+    .signup-link a:hover { color: var(--brand-deep); }
+    .signup-link a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 2px; }
 
     .skip-link {
       position: absolute;
       top: -100%;
       left: 1rem;
-      background: #1a3a6b;
+      background: var(--brand);
       color: #fff;
       padding: 0.4rem 0.9rem;
       border-radius: 0 0 6px 6px;
@@ -108,6 +180,14 @@
       z-index: 999;
     }
     .skip-link:focus { top: 0; }
+
+    .alert-danger {
+      background: var(--error-bg);
+      border-color: #fecaca;
+      color: #7f1d1d;
+      border-radius: 10px;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
@@ -116,15 +196,9 @@
 
   <div class="card">
 
-    <div class="brand" aria-hidden="true">
-      <div class="brand-dot">
-        <i class="bi bi-layers"></i>
-      </div>
-      <span class="brand-name">SpApp</span>
-    </div>
-
     <h1>Welcome back</h1>
     <p class="subtitle">Sign in to continue to your account.</p>
+    <div class="form-divider"></div>
 
     <div id="loginAlert" class="alert alert-danger d-none" role="alert" aria-live="assertive">
       <i class="bi bi-exclamation-circle me-2" aria-hidden="true"></i>
@@ -141,7 +215,7 @@
         </label>
         <input
           type="email" class="form-control" id="email"
-          autocomplete="email" placeholder="tree@yahoo.com"
+          autocomplete="email" placeholder="you@example.com"
           required aria-required="true" aria-describedby="emailError"
         />
         <div id="emailError" class="field-error" role="alert">
@@ -171,7 +245,7 @@
 
     </form>
 
-    <p class="text-center mt-3 signup-link" style="font-size:0.875rem; color:#6b7280;">
+    <p class="signup-link">
       Don't have an account? <a href="SignUp.html">Create one</a>
     </p>
 
