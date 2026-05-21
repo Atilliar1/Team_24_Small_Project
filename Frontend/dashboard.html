@@ -7,6 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --brand:     #0c4480;
@@ -27,7 +28,6 @@
       color: var(--text);
     }
 
-    /* ── NAV ── */
     nav {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -50,7 +50,11 @@
       place-items: center;
       flex-shrink: 0;
     }
-    .nav-icon i { color: #fff; font-size: 0.85rem; }
+
+    .nav-icon i {
+      color: #fff;
+      font-size: 0.85rem;
+    }
 
     .nav-divider {
       width: 1px;
@@ -71,11 +75,18 @@
       width: 260px;
       transition: border-color .15s, box-shadow .15s;
     }
+
     .search-wrap:focus-within {
       border-color: var(--brand-mid);
       box-shadow: 0 0 0 3px rgba(21,96,160,0.12);
     }
-    .search-wrap i { color: var(--muted); font-size: 0.8rem; flex-shrink: 0; }
+
+    .search-wrap i {
+      color: var(--muted);
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
     .search-wrap input {
       border: none;
       background: transparent;
@@ -85,9 +96,14 @@
       outline: none;
       width: 100%;
     }
-    .search-wrap input::placeholder { color: #9ab8cc; }
 
-    .nav-spacer { flex: 1; }
+    .search-wrap input::placeholder {
+      color: #9ab8cc;
+    }
+
+    .nav-spacer {
+      flex: 1;
+    }
 
     .btn-add {
       display: flex;
@@ -106,8 +122,14 @@
       transition: background .15s;
       white-space: nowrap;
     }
-    .btn-add:hover { background: var(--brand-mid); }
-    .btn-add i { font-size: 0.9rem; }
+
+    .btn-add:hover {
+      background: var(--brand-mid);
+    }
+
+    .btn-add i {
+      font-size: 0.9rem;
+    }
 
     .avatar {
       width: 30px;
@@ -119,9 +141,12 @@
       place-items: center;
       cursor: pointer;
     }
-    .avatar i { color: var(--brand); font-size: 0.9rem; }
 
-    /* ── PAGE CONTENT ── */
+    .avatar i {
+      color: var(--brand);
+      font-size: 0.9rem;
+    }
+
     .page {
       padding: 28px 24px;
     }
@@ -132,11 +157,13 @@
       gap: 10px;
       margin-bottom: 20px;
     }
+
     .page-header h1 {
       font-size: 1.25rem;
       font-weight: 700;
       color: var(--text);
     }
+
     .count-badge {
       font-size: 0.75rem;
       font-weight: 600;
@@ -146,7 +173,6 @@
       border-radius: 20px;
     }
 
-    /* placeholder */
     .empty {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -159,10 +185,95 @@
       gap: 8px;
       color: var(--muted);
     }
-    .empty i { font-size: 2rem; opacity: 0.3; }
-    .empty p { font-size: 0.875rem; }
+
+    .empty i {
+      font-size: 2rem;
+      opacity: 0.3;
+    }
+
+    .empty p {
+      font-size: 0.875rem;
+    }
+
+    .modal-content {
+      border: none;
+      border-radius: 18px;
+      overflow: hidden;
+      font-family: var(--font);
+    }
+
+    .modal-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 22px;
+    }
+
+    .modal-title {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 22px;
+      background: #f9fcff;
+    }
+
+    .modal-footer {
+      border-top: 1px solid var(--border);
+      padding: 16px 22px;
+      background: var(--surface);
+    }
+
+    .form-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .form-control,
+    .form-control:focus {
+      border-radius: 10px;
+      border-color: var(--border);
+      box-shadow: none;
+      font-size: 0.9rem;
+      padding: 10px 12px;
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn-brand {
+      background: var(--brand);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 600;
+    }
+
+    .btn-brand:hover {
+      background: var(--brand-mid);
+      color: white;
+    }
+
+    .btn-light-custom {
+      background: #eef5fc;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 600;
+    }
+
+    .btn-light-custom:hover {
+      background: #e4eff9;
+    }
   </style>
 </head>
+
 <body>
 
   <nav aria-label="Main navigation">
@@ -179,9 +290,22 @@
 
     <div class="nav-spacer"></div>
 
-    <button class="btn-add">
+    <button
+      class="btn-add"
+      data-bs-toggle="modal"
+      data-bs-target="#addContactModal"
+    >
       <i class="bi bi-plus-lg" aria-hidden="true"></i>
       Add Contact
+    </button>
+
+    <button
+      class="btn-add"
+      data-bs-toggle="modal"
+      data-bs-target="#editContactModal"
+    >
+      <i class="bi bi-pencil-square" aria-hidden="true"></i>
+      Edit Contact
     </button>
 
     <div class="avatar" role="button" tabindex="0" aria-label="User menu">
@@ -201,6 +325,285 @@
     </div>
   </main>
 
+  <div
+    class="modal fade"
+    id="addContactModal"
+    tabindex="-1"
+    aria-labelledby="addContactModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="addContactModalLabel">
+            Add Contact
+          </h5>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="addContactForm">
+
+            <div class="row g-3">
+
+              <div class="col-md-6">
+                <label for="addFirstName" class="form-label">
+                  First Name
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  id="addFirstName"
+                  name="FirstName"
+                  placeholder="Enter first name"
+                >
+              </div>
+
+              <div class="col-md-6">
+                <label for="addLastName" class="form-label">
+                  Last Name
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  id="addLastName"
+                  name="LastName"
+                  placeholder="Enter last name"
+                >
+              </div>
+
+              <div class="col-md-6">
+                <label for="addEmail" class="form-label">
+                  Email
+                </label>
+
+                <input
+                  type="email"
+                  class="form-control"
+                  id="addEmail"
+                  name="Email"
+                  placeholder="Enter email"
+                >
+              </div>
+
+              <div class="col-md-6">
+                <label for="addPhone" class="form-label">
+                  Phone
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  id="addPhone"
+                  name="Phone"
+                  placeholder="Enter phone number"
+                >
+              </div>
+
+              <div class="col-12">
+                <label for="addAddress" class="form-label">
+                  Address
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  id="addAddress"
+                  name="Address"
+                  placeholder="Enter address"
+                >
+              </div>
+
+              
+              <div class="col-12">
+                <label for="addNotes" class="form-label">
+                  Notes
+                </label>
+
+                <textarea
+                  class="form-control"
+                  id="addNotes"
+                  name="Notes"
+                  placeholder="Enter notes"
+                ></textarea>
+              </div>
+
+            </div>
+
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn-light-custom"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            form="addContactForm"
+            class="btn-brand"
+          >
+            Save Contact
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="editContactModal"
+    tabindex="-1"
+    aria-labelledby="editContactModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="editContactModalLabel">
+            Edit Contact
+          </h5>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="editContactForm">
+
+            <div class="row g-3">
+
+              <div class="col-md-6">
+                <label for="editFirstName" class="form-label">
+                  First Name
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editFirstName"
+                  name="FirstName"
+                  placeholder="Enter first name"
+                >
+              </div>
+
+              <div class="col-md-6">
+                <label for="editLastName" class="form-label">
+                  Last Name
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editLastName"
+                  name="LastName"
+                  placeholder="Enter last name"
+                >
+              </div>
+
+              <div class="col-md-6">
+                <label for="editEmail" class="form-label">
+                  Email
+                </label>
+
+                <input
+                  type="email"
+                  class="form-control"
+                  id="editEmail"
+                  name="Email"
+                  placeholder="Enter email"
+                >
+              </div>
+
+              <div class="col-md-6">
+                <label for="editPhone" class="form-label">
+                  Phone
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editPhone"
+                  name="Phone"
+                  placeholder="Enter phone number"
+                >
+              </div>
+
+              <div class="col-12">
+                <label for="editAddress" class="form-label">
+                  Address
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editAddress"
+                  name="Address"
+                  placeholder="Enter address"
+                >
+              </div>
+
+              
+              <div class="col-12">
+                <label for="editNotes" class="form-label">
+                  Notes
+                </label>
+
+                <textarea
+                  class="form-control"
+                  id="editNotes"
+                  name="Notes"
+                  placeholder="Enter notes"
+                ></textarea>
+              </div>
+
+            </div>
+
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn-light-custom"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            form="editContactForm"
+            class="btn-brand"
+          >
+            Update Contact
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
