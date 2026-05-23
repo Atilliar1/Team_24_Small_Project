@@ -39,8 +39,7 @@
       overflow: hidden;
     }
 
-    body::before,
-    body::after {
+    body::before, body::after {
       content: '';
       position: fixed;
       border-radius: 50%;
@@ -146,6 +145,7 @@
     .btn-signin:hover  { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(12,68,128,0.5); }
     .btn-signin:active { transform: scale(0.98); filter: brightness(0.95); }
     .btn-signin:focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
+    .btn-signin:disabled { opacity: 0.7; cursor: not-allowed; }
 
     .field-error {
       display: none;
@@ -165,7 +165,6 @@
       text-underline-offset: 2px;
     }
     .signup-link a:hover { color: var(--brand-deep); }
-    .signup-link a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 2px; }
 
     .skip-link {
       position: absolute;
@@ -195,7 +194,6 @@
   <a class="skip-link" href="#loginForm">Skip to login form</a>
 
   <div class="card">
-
     <h1>Welcome back</h1>
     <p class="subtitle">Sign in to continue to your account.</p>
     <div class="form-divider"></div>
@@ -241,19 +239,20 @@
         </div>
       </div>
 
-      <button type="submit" class="btn-signin">Sign in</button>
+      <button type="submit" class="btn-signin" id="submitBtn">Sign in</button>
 
     </form>
 
     <p class="signup-link">
       Don't have an account? <a href="SignUp.html">Create one</a>
     </p>
-
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
+    const API_BASE = 'http://161.35.111.8/LAMPAPI';
+
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const username    = document.getElementById('username');
@@ -262,32 +261,69 @@
       const usernameTxt = document.getElementById('usernameErrorText');
       const pwErr       = document.getElementById('passwordError');
       const pwTxt       = document.getElementById('passwordErrorText');
+      const alert       = document.getElementById('loginAlert');
+      const alertText   = document.getElementById('loginAlertText');
+      const submitBtn   = document.getElementById('submitBtn');
 
+      // Clear previous errors
       [username, password].forEach(i => {
         i.removeAttribute('aria-invalid');
         i.classList.remove('is-invalid');
       });
       usernameErr.classList.remove('visible');
       pwErr.classList.remove('visible');
+      alert.classList.add('d-none');
 
+      // Validate fields
       let valid = true;
-
       if (!username.value.trim()) {
         showFieldError(username, usernameErr, usernameTxt, 'Username is required.');
         valid = false;
       }
-
       if (!password.value) {
         showFieldError(password, pwErr, pwTxt, 'Password is required.');
         valid = false;
       }
-
       if (!valid) {
         document.querySelector('[aria-invalid="true"]').focus();
         return;
       }
 
-      // TODO: connect to API
+      // Call Login.php
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in…';
+
+      try {
+        const response = await fetch(`${API_BASE}/Login.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            login: username.value.trim(),
+            password: password.value
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.error !== '') {
+          // Show error alert
+          alertText.textContent = data.error;
+          alert.classList.remove('d-none');
+        } else {
+          // Save user info and redirect to dashboard
+          sessionStorage.setItem('userId',    data.id);
+          sessionStorage.setItem('firstName', data.firstName);
+          sessionStorage.setItem('lastName',  data.lastName);
+          window.location.href = 'dashboard.html';
+        }
+
+      } catch (err) {
+        alertText.textContent = 'Unable to connect to server. Please try again.';
+        alert.classList.remove('d-none');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign in';
+      }
     });
 
     function showFieldError(input, errEl, txtEl, msg) {
