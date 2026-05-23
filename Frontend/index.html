@@ -208,19 +208,19 @@
     <form id="loginForm" novalidate>
 
       <div class="mb-3">
-        <label for="email" class="form-label">
-          Email address
+        <label for="username" class="form-label">
+          Username
           <span aria-hidden="true" style="color:#b91c1c;">*</span>
           <span class="visually-hidden">(required)</span>
         </label>
         <input
-          type="email" class="form-control" id="email"
-          autocomplete="email" placeholder="you@example.com"
-          required aria-required="true" aria-describedby="emailError"
+          type="text" class="form-control" id="username"
+          autocomplete="username" placeholder="Enter your username"
+          required aria-required="true" aria-describedby="usernameError"
         />
-        <div id="emailError" class="field-error" role="alert">
+        <div id="usernameError" class="field-error" role="alert">
           <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
-          <span id="emailErrorText"></span>
+          <span id="usernameErrorText"></span>
         </div>
       </div>
 
@@ -256,27 +256,24 @@
     document.getElementById('loginForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
-      const email    = document.getElementById('email');
-      const password = document.getElementById('password');
-      const emailErr = document.getElementById('emailError');
-      const emailTxt = document.getElementById('emailErrorText');
-      const pwErr    = document.getElementById('passwordError');
-      const pwTxt    = document.getElementById('passwordErrorText');
+      const username    = document.getElementById('username');
+      const password    = document.getElementById('password');
+      const usernameErr = document.getElementById('usernameError');
+      const usernameTxt = document.getElementById('usernameErrorText');
+      const pwErr       = document.getElementById('passwordError');
+      const pwTxt       = document.getElementById('passwordErrorText');
 
-      [email, password].forEach(i => {
+      [username, password].forEach(i => {
         i.removeAttribute('aria-invalid');
         i.classList.remove('is-invalid');
       });
-      emailErr.classList.remove('visible');
+      usernameErr.classList.remove('visible');
       pwErr.classList.remove('visible');
 
       let valid = true;
 
-      if (!email.value.trim()) {
-        showFieldError(email, emailErr, emailTxt, 'Email is required.');
-        valid = false;
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-        showFieldError(email, emailErr, emailTxt, 'Enter a valid email address.');
+      if (!username.value.trim()) {
+        showFieldError(username, usernameErr, usernameTxt, 'Username is required.');
         valid = false;
       }
 
