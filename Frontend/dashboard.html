@@ -617,7 +617,7 @@
       .addEventListener('submit', updateContact);
   });
 
-  function loadContacts() {
+function loadContacts() {
     const userId = sessionStorage.getItem('userId');
 
     if (!userId) {
@@ -639,10 +639,10 @@
       return response.json();
     })
     .then(function(data) {
-
+      // FIX: If there are no errors, render the contacts.
       if (data.error === '') {
         renderContacts(data.results);
-      }
+      } 
       else {
         renderContacts([]);
       }
@@ -659,13 +659,14 @@
     const emptyDiv = main.querySelector('.empty');
     const countBadge = document.querySelector('.count-badge');
 
+    // Potential Edge case: Clear any existing lists first so search function doesn't make duplicates
+    const existingList = document.getElementById('contactList');
+    if (existingList) existingList.remove();
+
+    // Force the badge to match the exact number of contacts
     countBadge.textContent = contacts.length;
 
-    const existingList = document.getElementById('contactList');
-
-    if (existingList) {
-      existingList.remove();
-    }
+    
 
     if (contacts.length === 0) {
 
@@ -732,12 +733,11 @@
               : '') +
 
           '</div>' +
-
         '</div>' +
-
-        '<button class="btn-brand edit-btn">' +
-          'Edit' +
-        '</button>';
+        '<div style="display:flex;gap:8px;">' +
+          '<button class="btn-brand edit-btn" style="padding:6px 12px;">Edit</button>' +
+          '<button onclick="deleteContact(' + contact.id + ')" style="background:#fee2e2;border:none;border-radius:8px;padding:6px 12px;color:#b91c1c;font-weight:600;cursor:pointer;">Delete</button>' +
+        '</div>';
 
       card.querySelector('.edit-btn')
         .addEventListener('click', function () {
@@ -880,6 +880,62 @@
     document.querySelector('.count-badge')
       .textContent = visibleCount;
   }
+  
+// ADD CONTACT
+  document.getElementById('addContactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const userId = sessionStorage.getItem('userId');
+
+    fetch(API_BASE + '/AddContact.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: userId,
+        firstName: document.getElementById('addFirstName').value,
+        lastName: document.getElementById('addLastName').value,
+        email: document.getElementById('addEmail').value,
+        phone: document.getElementById('addPhone').value,
+        address: document.getElementById('addAddress').value,
+        notes: document.getElementById('addNotes').value
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error === '') {
+        bootstrap.Modal.getInstance(document.getElementById('addContactModal')).hide();
+        document.getElementById('addContactForm').reset();
+        const existing = document.getElementById('contactList');
+        if (existing) existing.remove();
+        loadContacts();
+      } else {
+        alert('Error: ' + data.error);
+      }
+    });
+  });
+
+  // DELETE CONTACT
+  function deleteContact(contactId) {
+    if (!confirm('Delete this contact?')) return;
+    const userId = sessionStorage.getItem('userId');
+
+    fetch(API_BASE + '/DeleteContact.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: contactId, userId: userId })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error === '') {
+        const existing = document.getElementById('contactList');
+        if (existing) existing.remove();
+        loadContacts();
+      } else {
+        alert('Error: ' + data.error);
+      }
+    });
+  }
+
+
 </script>
 
 </body>

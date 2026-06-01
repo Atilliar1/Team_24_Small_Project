@@ -16,6 +16,7 @@ The project uses a LAMP stack with a remote database and communicates between th
 | Hurley Jonathon | Database |
 | Nahin Takrim | Front-End |
 | Sundar Shivram | Project Manager & API |
+| Zachary Lemon | Floater |
 
 
 ---

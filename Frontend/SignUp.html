@@ -407,7 +407,34 @@
         return;
       }
 
-      // TODO: connect to API
+      // Send the validated data to the PHP API
+      fetch("http://161.35.111.8/LAMPAPI/Register.php", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json" 
+        },
+        body: JSON.stringify({
+          login: document.getElementById("email").value,
+          password: document.getElementById("password").value,
+          firstName: document.getElementById("fname").value,
+          lastName: document.getElementById("lname").value
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // If the API returns no error string, registration was successful
+        if (data.error === "") {
+          alert("Account created successfully! Redirecting to login...");
+          window.location.href = "index.html";
+        } else {
+          // If the API throws an error (e.g., email already exists), show it
+          alert("Registration failed: " + data.error);
+        }
+      })
+      .catch(error => {
+        console.error("Error during registration:", error);
+        alert("Could not connect to the server.");
+      });
     });
 
     function showFieldError(input, errId, txtId, msg) {
