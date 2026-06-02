@@ -25,7 +25,7 @@ if($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 	else
 	{
 		$stmt = $conn->prepare("INSERT into Contacts (UserID, FirstName, LastName, Email, Phone, Address, Notes) VALUES(?,?,?,?,?,?,?)");
-		$stmt->bind_param("sssssss", $userId, $firstName, $lastName, $email, $phone, $address, $notes);
+		$stmt->bind_param("issssss", $userId, $firstName, $lastName, $email, $phone, $address, $notes);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();

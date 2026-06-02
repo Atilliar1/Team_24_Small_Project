@@ -21,7 +21,7 @@ if ($conn->connect_error)
 		$stmt = $conn->prepare("SELECT ID, FirstName, LastName, Email, Phone, Address, Notes FROM Contacts WHERE (FirstName like ? OR LastName like ?) AND UserID=?");
 		$searchTerm = "%" . $inData["search"] . "%";
 		
-		$stmt->bind_param("sss", $searchTerm, $searchTerm, $inData["userId"]);
+		$stmt->bind_param("ssi", $searchTerm, $searchTerm, $inData["userId"]);
 		$stmt->execute();
 		
 		$result = $stmt->get_result();

@@ -26,7 +26,7 @@ if($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 	else
 	{
 		$stmt = $conn->prepare("UPDATE Contacts SET FirstName=?, LastName=?, Email=?, Phone=?, Address=?, Notes=? WHERE ID=? AND UserID=?");
-		$stmt->bind_param("ssssssss", $firstName, $lastName, $email, $phone, $address, $notes, $contactId, $userId);
+		$stmt->bind_param("ssssssii", $firstName, $lastName, $email, $phone, $address, $notes, $contactId, $userId);
 		$stmt->execute();
 		
 		if($stmt->affected_rows > 0)

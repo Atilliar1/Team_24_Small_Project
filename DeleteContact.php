@@ -20,7 +20,7 @@ if($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 	else
 	{
 		$stmt = $conn->prepare("DELETE FROM Contacts WHERE ID=? AND UserID=?");
-		$stmt->bind_param("ss", $contactId, $userId);
+		$stmt->bind_param("ii", $contactId, $userId);
 		$stmt->execute();
 		
 		if($stmt->affected_rows > 0)
