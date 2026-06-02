@@ -299,14 +299,7 @@
       Add Contact
     </button>
 
-    <button
-      class="btn-add"
-      data-bs-toggle="modal"
-      data-bs-target="#editContactModal"
-    >
-      <i class="bi bi-pencil-square" aria-hidden="true"></i>
-      Edit Contact
-    </button>
+   
 
     <div class="avatar" role="button" tabindex="0" aria-label="User menu">
       <i class="bi bi-person"></i>
@@ -605,11 +598,23 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
+<script>
   const API_BASE = 'http://161.35.111.8/LAMPAPI';
+
+  let currentContactId = null;
 
   window.addEventListener('DOMContentLoaded', function () {
     loadContacts();
+
+    const searchInput = document.querySelector('.search-wrap input');
+
+    searchInput.addEventListener('input', function () {
+      filterContacts(this.value);
+    });
+
+    document
+      .getElementById('editContactForm')
+      .addEventListener('submit', updateContact);
   });
 
 function loadContacts() {
@@ -622,27 +627,36 @@ function loadContacts() {
 
     fetch(API_BASE + '/SearchContact.php', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: userId, search: '' })
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId: userId,
+        search: ''
+      })
     })
-    .then(function(response) { return response.json(); })
+    .then(function(response) {
+      return response.json();
+    })
     .then(function(data) {
       // FIX: If there are no errors, render the contacts.
       if (data.error === '') {
         renderContacts(data.results);
-      } else {
-        // FIX: If there IS an error (like "No Records Found"), render an empty array!
+      } 
+      else {
         renderContacts([]);
       }
+
     })
     .catch(function(err) {
       console.error('Failed to load contacts:', err);
     });
   }
 
-function renderContacts(contacts) {
-    const main       = document.querySelector('main.page');
-    const emptyDiv   = main.querySelector('.empty');
+  function renderContacts(contacts) {
+
+    const main = document.querySelector('main.page');
+    const emptyDiv = main.querySelector('.empty');
     const countBadge = document.querySelector('.count-badge');
 
     // Potential Edge case: Clear any existing lists first so search function doesn't make duplicates
@@ -652,37 +666,219 @@ function renderContacts(contacts) {
     // Force the badge to match the exact number of contacts
     countBadge.textContent = contacts.length;
 
-    // FIX: If we have 0 contacts, show the empty state box and stop running
+    
+
     if (contacts.length === 0) {
-      if (emptyDiv) emptyDiv.style.display = 'flex';
-      return; 
+
+      if (emptyDiv) {
+        emptyDiv.style.display = 'flex';
+      }
+
+      return;
     }
 
-    // Otherwise, hide the empty state box so we can draw the cards
-    if (emptyDiv) emptyDiv.style.display = 'none';
+    if (emptyDiv) {
+      emptyDiv.style.display = 'none';
+    }
 
     const list = document.createElement('div');
+
     list.id = 'contactList';
-    list.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
+
+    list.style.cssText =
+      'display:flex;' +
+      'flex-direction:column;' +
+      'gap:10px;';
 
     contacts.forEach(function(contact) {
+
       const card = document.createElement('div');
-      card.style.cssText = 'background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:16px;';
+
+      card.className = 'contact-card';
+
+      card.style.cssText =
+        'background:#fff;' +
+        'border:1px solid var(--border);' +
+        'border-radius:12px;' +
+        'padding:16px 20px;' +
+        'display:flex;' +
+        'align-items:center;' +
+        'gap:16px;';
+
+      card.setAttribute(
+        'data-search',
+        (
+          (contact.firstName || '') + ' ' +
+          (contact.lastName || '') + ' ' +
+          (contact.email || '') + ' ' +
+          (contact.phone || '') + ' ' +
+          (contact.address || '') + ' ' +
+          (contact.notes || '')
+        ).toLowerCase()
+      );
+
       card.innerHTML =
         '<div style="flex:1;">' +
+
           '<div style="font-weight:600;color:var(--text);">' +
             contact.firstName + ' ' + contact.lastName +
           '</div>' +
+
           '<div style="font-size:0.85rem;color:var(--muted);margin-top:4px;">' +
+
             (contact.email ? contact.email : '') +
-            (contact.phone ? ' &nbsp;·&nbsp; ' + contact.phone : '') +
+
+            (contact.phone
+              ? ' &nbsp;·&nbsp; ' + contact.phone
+              : '') +
+
           '</div>' +
         '</div>' +
-        '<button onclick="deleteContact(' + contact.id + ')" aria-label="Delete contact ' + contact.firstName + ' ' + contact.lastName + '" style="background:#fee2e2;border:none;border-radius:8px;padding:6px 12px;color:#b91c1c;font-weight:600;cursor:pointer;transition:0.2s;">Delete</button>';
+        '<div style="display:flex;gap:8px;">' +
+          '<button class="btn-brand edit-btn" style="padding:6px 12px;">Edit</button>' +
+          '<button onclick="deleteContact(' + contact.id + ')" style="background:#fee2e2;border:none;border-radius:8px;padding:6px 12px;color:#b91c1c;font-weight:600;cursor:pointer;">Delete</button>' +
+        '</div>';
+
+      card.querySelector('.edit-btn')
+        .addEventListener('click', function () {
+          openEditModal(contact);
+        });
+
       list.appendChild(card);
     });
 
     main.appendChild(list);
+  }
+
+  function openEditModal(contact) {
+
+    currentContactId = contact.id;
+
+    document.getElementById('editFirstName').value =
+      contact.firstName || '';
+
+    document.getElementById('editLastName').value =
+      contact.lastName || '';
+
+    document.getElementById('editEmail').value =
+      contact.email || '';
+
+    document.getElementById('editPhone').value =
+      contact.phone || '';
+
+    document.getElementById('editAddress').value =
+      contact.address || '';
+
+    document.getElementById('editNotes').value =
+      contact.notes || '';
+
+    const modal =
+      new bootstrap.Modal(
+        document.getElementById('editContactModal')
+      );
+
+    modal.show();
+  }
+
+  function updateContact(event) {
+
+    event.preventDefault();
+
+    const userId = sessionStorage.getItem('userId');
+
+    fetch(API_BASE + '/UpdateContact.php', {
+
+      method: 'POST',
+
+      headers: {
+        'Content-Type': 'application/json'
+      },
+
+      body: JSON.stringify({
+
+        id: currentContactId,
+
+        userId: userId,
+
+        firstName:
+          document.getElementById('editFirstName').value,
+
+        lastName:
+          document.getElementById('editLastName').value,
+
+        email:
+          document.getElementById('editEmail').value,
+
+        phone:
+          document.getElementById('editPhone').value,
+
+        address:
+          document.getElementById('editAddress').value,
+
+        notes:
+          document.getElementById('editNotes').value
+      })
+    })
+
+    .then(function(response) {
+      return response.json();
+    })
+
+    .then(function(data) {
+
+      if (data.error === '') {
+
+        bootstrap.Modal
+          .getInstance(
+            document.getElementById('editContactModal')
+          )
+          .hide();
+
+        loadContacts();
+
+        alert('Contact updated successfully');
+      }
+      else {
+
+        alert(data.error);
+      }
+    })
+
+    .catch(function(error) {
+
+      console.error(error);
+
+      alert('Failed to update contact');
+    });
+  }
+
+  function filterContacts(searchText) {
+
+    const cards = document.querySelectorAll('.contact-card');
+
+    const search = searchText.toLowerCase().trim();
+
+    let visibleCount = 0;
+
+    cards.forEach(function(card) {
+
+      const searchableText =
+        card.getAttribute('data-search');
+
+      if (searchableText.includes(search)) {
+
+        card.style.display = 'flex';
+
+        visibleCount++;
+      }
+      else {
+
+        card.style.display = 'none';
+      }
+    });
+
+    document.querySelector('.count-badge')
+      .textContent = visibleCount;
   }
   
 // ADD CONTACT
