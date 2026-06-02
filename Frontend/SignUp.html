@@ -264,13 +264,13 @@
 
       <div class="mb-3">
         <label for="email" class="form-label">
-          Email address
+          Username
           <span aria-hidden="true" style="color:#b91c1c;">*</span>
           <span class="visually-hidden">(required)</span>
         </label>
         <input
-          type="email" class="form-control" id="email"
-          autocomplete="email" placeholder="you@example.com"
+          type="text" class="form-control" id="email"
+          autocomplete="username" placeholder="Choose a username"
           required aria-required="true" aria-describedby="emailError"
         />
         <div id="emailError" class="field-error" role="alert">
@@ -361,7 +361,7 @@
       const fields = [
         { id: 'fname',           errId: 'fnameError',    txtId: 'fnameErrorText',    msg: 'First name is required.' },
         { id: 'lname',           errId: 'lnameError',    txtId: 'lnameErrorText',    msg: 'Last name is required.' },
-        { id: 'email',           errId: 'emailError',    txtId: 'emailErrorText',    msg: 'Email is required.' },
+        { id: 'email',           errId: 'emailError',    txtId: 'emailErrorText',    msg: 'Username is required.' },
         { id: 'password',        errId: 'passwordError', txtId: 'passwordErrorText', msg: 'Password is required.' },
         { id: 'confirmPassword', errId: 'confirmError',  txtId: 'confirmErrorText',  msg: 'Please confirm your password.' },
       ];
@@ -382,12 +382,6 @@
           valid = false;
         }
       });
-
-      const emailInput = document.getElementById('email');
-      if (emailInput.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
-        showFieldError(emailInput, 'emailError', 'emailErrorText', 'Enter a valid email address.');
-        valid = false;
-      }
 
       const pwInput = document.getElementById('password');
       if (pwInput.value && pwInput.value.length < 8) {
@@ -424,16 +418,14 @@
       .then(data => {
         // If the API returns no error string, registration was successful
         if (data.error === "") {
-          alert("Account created successfully! Redirecting to login...");
           window.location.href = "index.html";
         } else {
-          // If the API throws an error (e.g., email already exists), show it
-          alert("Registration failed: " + data.error);
+          showFieldError(document.getElementById('email'), 'emailError', 'emailErrorText', data.error);
         }
       })
       .catch(error => {
         console.error("Error during registration:", error);
-        alert("Could not connect to the server.");
+        showFieldError(document.getElementById('email'), 'emailError', 'emailErrorText', 'Could not connect to the server.');
       });
     });
 
