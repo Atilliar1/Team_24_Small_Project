@@ -18,7 +18,7 @@ if ($conn->connect_error)
 	} 
 	else
 	{
-		$stmt = $conn->prepare("SELECT ID, FirstName, LastName, Email, Phone, Address, Notes FROM Contacts WHERE (FirstName like ? OR LastName like ?) AND UserID=?");
+		$stmt = $conn->prepare("SELECT ID, FirstName, LastName, Email, Phone, Address, Notes, DateCreated FROM Contacts WHERE (FirstName like ? OR LastName like ?) AND UserID=?");
 		$searchTerm = "%" . $inData["search"] . "%";
 		
 		$stmt->bind_param("ssi", $searchTerm, $searchTerm, $inData["userId"]);
@@ -33,7 +33,7 @@ while($row = $result->fetch_assoc())
         $searchResults .= ",";
     }
     $searchCount++;
-    $searchResults .= '{"id":' . $row["ID"] . ',"firstName":"' . $row["FirstName"] . '","lastName":"' . $row["LastName"] . '","email":"' . $row["Email"] . '","phone":"' . $row["Phone"] . '","address":"' . $row["Address"] . '","notes":"' . $row["Notes"] . '"}';
+    $searchResults .= '{"id":' . $row["ID"] . ',"firstName":"' . $row["FirstName"] . '","lastName":"' . $row["LastName"] . '","email":"' . $row["Email"] . '","phone":"' . $row["Phone"] . '","address":"' . $row["Address"] . '","notes":"' . $row["Notes"] . '","dateCreated":"' . $row["DateCreated"] . '"}';
 }
 
 if( $searchCount == 0 )

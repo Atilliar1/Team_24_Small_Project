@@ -301,8 +301,8 @@
 
    
 
-    <div class="avatar" role="button" tabindex="0" aria-label="User menu">
-      <i class="bi bi-person"></i>
+    <div class="avatar" role="button" tabindex="0" aria-label="Log out" onclick="logout()">
+      <i class="bi bi-box-arrow-right"></i>
     </div>
   </nav>
 
@@ -733,6 +733,9 @@ function loadContacts() {
               : '') +
 
           '</div>' +
+          '<div style="font-size:0.75rem;color:var(--muted);margin-top:6px;">' +
+            'Added ' + (contact.dateCreated ? contact.dateCreated.split(' ')[0] : 'unknown') +
+          '</div>' +
         '</div>' +
         '<div style="display:flex;gap:8px;">' +
           '<button class="btn-brand edit-btn" style="padding:6px 12px;">Edit</button>' +
@@ -933,6 +936,13 @@ function loadContacts() {
         alert('Error: ' + data.error);
       }
     });
+  }
+
+  //LOGOUT
+  function logout() {
+    if (!confirm('Log out?')) return;
+    sessionStorage.clear();
+    window.location.href = 'index.html';
   }
 
 
